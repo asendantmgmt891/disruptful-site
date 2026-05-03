@@ -34,7 +34,7 @@ const skyLinks = [
 ]
 
 const models = [
-  { name: 'Veyra Stehl', slug: '/models/veyra-stehl', market: 'Lifestyle • Glamour • Premium social', status: 'Growing audience', tone: 'Confident, editorial, phone-first content built for consistent fan conversion.', instagram: 'https://www.instagram.com/veyrastehl/', premium: 'https://onlyfans.com/veyrastehl' },
+  { name: 'Veyra Stehl', slug: '/models/veyra-stehl', market: 'Lifestyle • Glamour • Premium social', status: 'Growing audience', tone: 'Confident, editorial, phone-first content built for consistent fan conversion.', instagram: 'https://www.instagram.com/veyrastehl/', premium: 'https://onlyfans.com/veyrastehl', image: '/images/models/veyra-stehl.jpg' },
   { name: 'Featured Creator B', market: 'Fitness • Swim • Travel', status: 'Launch phase', tone: 'Aspirational daily content with polished brand rails and strong cross-platform hooks.' },
   { name: 'Featured Creator C', market: 'Alt • Fashion • Personality-led', status: 'Selective showcase', tone: 'Distinctive creator voice, strong visual identity, and platform-native content arcs.' },
 ]
@@ -281,7 +281,7 @@ function ModelsPage({ navigate }) {
     <section className="section-pad">
       <div className="section-heading"><p className="eyebrow">Selected roster</p><h1>A selection of models we’re building with.</h1><p className="lede">The current roster is intentionally small. These cards are structured so real model names, photos, and bios can be dropped in as assets are approved.</p></div>
       <div className="model-grid">
-        {models.map((model, idx) => <article className="model-card" key={model.name}><div className={`model-art art-${idx + 1}`}><Star /></div><div><p className="status">{model.status}</p><h3>{model.name}</h3><p className="market">{model.market}</p><p>{model.tone}</p></div>{model.slug ? <a href={model.slug} onClick={navigate(model.slug)}>View profile <ChevronRight size={17}/></a> : <a href="/apply" onClick={navigate('/apply')}>Collaborate with us <ChevronRight size={17}/></a>}</article>)}
+        {models.map((model, idx) => <article className="model-card" key={model.name}><div className={`model-art art-${idx + 1}`}>{model.image ? <img src={model.image} alt={`${model.name} portrait`} /> : <Star />}</div><div><p className="status">{model.status}</p><h3>{model.name}</h3><p className="market">{model.market}</p><p>{model.tone}</p></div>{model.slug ? <a href={model.slug} onClick={navigate(model.slug)}>View profile <ChevronRight size={17}/></a> : <a href="/apply" onClick={navigate('/apply')}>Collaborate with us <ChevronRight size={17}/></a>}</article>)}
       </div>
     </section>
   )
@@ -315,7 +315,7 @@ function ModelProfilePage({ model, navigate }) {
   return (
     <section className="section-pad model-profile-page">
       <div className="profile-hero model-profile-hero">
-        <div className="portrait model-portrait"><span>VS</span></div>
+        <div className="portrait model-portrait photo-portrait"><img src={model.image} alt={`${model.name} portrait`} /></div>
         <div>
           <p className="eyebrow">Disruptful model</p>
           <h1>{model.name}</h1>
