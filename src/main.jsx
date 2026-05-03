@@ -34,7 +34,7 @@ const skyLinks = [
 ]
 
 const models = [
-  { name: 'Veyra Stehl', slug: '/models/veyra-stehl', market: 'Lifestyle • Glamour • Premium social', status: 'Growing audience', tone: 'Confident, editorial, phone-first content built for consistent fan conversion.', instagram: 'https://www.instagram.com/veyrastehl/', premium: 'https://onlyfans.com/veyrastehl', image: '/images/models/veyra-stehl.jpg' },
+  { name: 'Veyra Stehl', slug: '/models/veyra-stehl', market: 'Yoga • Fitness • Visual inspiration', status: 'Digital creator', tone: 'Yoga and fitness for visual inspiration — mainly for men, but all are welcome. Move better, stress less, and build a stronger mind and body.', instagram: 'https://www.instagram.com/veyrastehl/', premium: 'https://onlyfans.com/veyrastehl', image: '/images/models/veyra-stehl.jpg' },
   { name: 'Featured Creator B', market: 'Fitness • Swim • Travel', status: 'Launch phase', tone: 'Aspirational daily content with polished brand rails and strong cross-platform hooks.' },
   { name: 'Featured Creator C', market: 'Alt • Fashion • Personality-led', status: 'Selective showcase', tone: 'Distinctive creator voice, strong visual identity, and platform-native content arcs.' },
 ]
@@ -320,7 +320,7 @@ function ModelProfilePage({ model, navigate }) {
           <p className="eyebrow">Disruptful model</p>
           <h1>{model.name}</h1>
           <h2>{model.market}</h2>
-          <p className="lede">A polished creator profile built around confident visual identity, consistent audience growth, and premium social presentation.</p>
+          <p className="lede">Yoga and fitness for visual inspiration — mainly for men, but all are welcome. Move better, stress less, and build a stronger mind and body.</p>
           <div className="hero-actions">
             <a className="button primary" href={model.instagram} target="_blank" rel="noreferrer">Instagram <ExternalLink size={18}/></a>
             <AdultPlatformLink href={model.premium}>Premium platform <ExternalLink size={18}/></AdultPlatformLink>
