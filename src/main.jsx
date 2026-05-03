@@ -9,7 +9,7 @@ const team = {
     role: 'Co-Founder, Technology & Creative Strategy',
     intro: 'Eddie leads the systems behind Disruptful’s growth engine: proprietary technology, creative content direction, model positioning, and the strategy that turns attention into durable revenue.',
     details: ['Proprietary technology leadership', 'Creative content direction', 'Model positioning and brand strategy', 'Revenue systems and growth operations'],
-    image: '/images/eddie-veyra-stehl.jpg',
+    image: '/images/eddie-primary.jpg',
   },
   sky: {
     name: 'Sky Alexandra',
