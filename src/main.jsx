@@ -186,7 +186,7 @@ function HomePage({ navigate }) {
 
       <section className="section-pad split dark-panel">
         <div><p className="eyebrow">Selective by design</p><h2>We are not trying to work with everyone.</h2></div>
-        <p>We are building a focused roster of models who want a professional team, clear expectations, premium execution, privacy-aware strategy, and serious upside. The best fit is confident, responsive, consistent, and open to guidance.</p>
+        <p>We are building a focused roster of models who want a professional team, clear expectations, premium execution, privacy-aware strategy, and serious upside. The best fit is confident, highly motivated, responsive, consistent, and open to guidance.</p>
       </section>
     </>
   )
