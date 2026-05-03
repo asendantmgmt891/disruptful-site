@@ -22,7 +22,7 @@ const team = {
     role: 'Data Intelligence & Performance Strategy',
     intro: 'Sharon turns content performance into clear decisions. Her analysis shows us what is actually effective, so we can do more of what works, stop wasting energy on what does not, and make each model’s strategy sharper and more profitable over time.',
     details: ['Reach and engagement analysis', 'Content performance intelligence', 'Audience behavior insights', 'Profitability-focused optimization'],
-    image: '/images/sharon.jpg',
+    image: '/images/sharon-primary.jpg',
     gallery: ['/images/sharon-red-car.jpg'],
   },
 }
