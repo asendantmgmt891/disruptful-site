@@ -317,7 +317,7 @@ function ModelProfilePage({ model, navigate }) {
       <div className="profile-hero model-profile-hero">
         <div className="portrait model-portrait photo-portrait"><img src={model.image} alt={`${model.name} portrait`} /></div>
         <div>
-          <p className="eyebrow">Disruptful model</p>
+          <p className="eyebrow">Digital Creator</p>
           <h1>{model.name}</h1>
           <h2>{model.market}</h2>
           <p className="lede">Yoga and fitness for visual inspiration — mainly for men, but all are welcome. Move better, stress less, and build a stronger mind and body.</p>
@@ -326,11 +326,6 @@ function ModelProfilePage({ model, navigate }) {
             <AdultPlatformLink href={model.premium}>Premium platform <ExternalLink size={18}/></AdultPlatformLink>
           </div>
         </div>
-      </div>
-      <div className="cards three model-profile-cards">
-        <Feature icon={<Camera />} title="Visual direction" text="Editorial, phone-first content systems designed for consistent public-facing momentum." />
-        <Feature icon={<BarChart3 />} title="Audience growth" text="Social-safe growth strategy focused on profile polish, consistency, and measurable attention." />
-        <Feature icon={<LockKeyhole />} title="Discreet routing" text="External links that may contain mature content are protected by a sensitive-content confirmation step." />
       </div>
       {model.gallery?.length ? <div className="model-gallery" aria-label={`${model.name} photo gallery`}>
         {model.gallery.map((image, index) => <img key={image} src={image} alt={`${model.name} yoga and fitness photo ${index + 1}`} />)}
