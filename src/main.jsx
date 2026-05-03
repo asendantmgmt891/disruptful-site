@@ -259,7 +259,7 @@ function SharonPage({ navigate }) {
           <p className="eyebrow">Performance intelligence</p>
           <h1>Sharon</h1>
           <h2>Data Intelligence & Performance Strategy</h2>
-          <p className="lede">Sharon helps Disruptful models grow with evidence instead of guesswork. Her data analysis shows the team what is effective, so we can do more of what works, refine what is close, and stop wasting time on content that is not moving reach or profitability.</p>
+          <p className="lede">Sharon helps Disruptful models grow with evidence instead of guesswork. Her data analysis shows the team what is effective, so we can do more of what works, refine what is close, and stop wasting time on content that is not moving reach or profitability. Sharon's job is to turn numbers into dollars.</p>
           <div className="hero-actions">
             <a className="button primary" href="/apply" onClick={navigate('/apply')}>Apply to join the system <ArrowRight size={18}/></a>
           </div>
