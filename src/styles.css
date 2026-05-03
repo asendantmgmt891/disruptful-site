@@ -114,6 +114,7 @@ p { color: var(--muted); line-height: 1.65; }
 .model-art-link:hover img, .model-art-link:focus-visible img { transform: scale(1.035); filter: saturate(1.04) contrast(1.04); }
 .model-art-link:focus-visible { outline: 3px solid rgba(240,217,166,.7); outline-offset: -3px; }
 .model-art img { width: 100%; height: 100%; object-fit: cover; object-position: center 42%; }
+.model-art.art-1 img { object-position: center 72%; }
 .model-art svg { width: 52px; height: 52px; color: rgba(255,255,255,.75); }
 .art-2 { background: linear-gradient(135deg, rgba(125,108,255,.7), rgba(240,217,166,.42)); }
 .art-3 { background: linear-gradient(135deg, rgba(225,124,147,.7), rgba(120,218,199,.38)); }
