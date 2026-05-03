@@ -9,6 +9,7 @@ const team = {
     role: 'Co-Founder, Technology & Creative Strategy',
     intro: 'Eddie leads the systems behind Disruptful’s growth engine: proprietary technology, creative content direction, model positioning, and the strategy that turns attention into durable revenue.',
     details: ['Proprietary technology leadership', 'Creative content direction', 'Model positioning and brand strategy', 'Revenue systems and growth operations'],
+    image: '/images/eddie-veyra-stehl.jpg',
   },
   sky: {
     name: 'Sky Alexandra',
@@ -195,7 +196,7 @@ function PersonPage({ person, navigate }) {
   return (
     <section className="section-pad profile-page">
       <div className="profile-hero">
-        <div className="portrait"><span>{person.name[0]}</span></div>
+        <div className={person.image ? 'portrait photo-portrait' : 'portrait'}>{person.image ? <img src={person.image} alt={`${person.name} portrait`} /> : <span>{person.name[0]}</span>}</div>
         <div><p className="eyebrow">Leadership</p><h1>{person.name}</h1><h2>{person.role}</h2><p className="lede">{person.intro}</p></div>
       </div>
       <div className="cards two">{person.details.map(item => <article className="card compact" key={item}><BadgeCheck /><span>{item}</span></article>)}</div>
