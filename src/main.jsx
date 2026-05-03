@@ -23,6 +23,7 @@ const team = {
     intro: 'Sharon turns content performance into clear decisions. Her analysis shows us what is actually effective, so we can do more of what works, stop wasting energy on what does not, and make each model’s strategy sharper and more profitable over time.',
     details: ['Reach and engagement analysis', 'Content performance intelligence', 'Audience behavior insights', 'Profitability-focused optimization'],
     image: '/images/sharon.jpg',
+    gallery: ['/images/sharon-red-car.jpg'],
   },
 }
 
@@ -268,6 +269,9 @@ function SharonPage({ navigate }) {
         <Feature icon={<Sparkles />} title="Do more of what works" text="Turns performance data into practical direction, helping the team repeat effective content patterns instead of guessing." />
         <Feature icon={<Zap />} title="Profitability signals" text="Connects social performance to revenue outcomes so growth efforts stay focused on what actually improves the business." />
       </div>
+      {team.sharon.gallery?.length ? <div className="profile-gallery" aria-label="Sharon photo gallery">
+        {team.sharon.gallery.map((image, index) => <img key={image} src={image} alt={`Sharon photo ${index + 1}`} />)}
+      </div> : null}
       <section className="split dark-panel sharon-story">
         <div><p className="eyebrow">Why it matters</p><h2>Every content cycle should make the next one smarter.</h2></div>
         <p>Models should not have to wonder whether something is working. Sharon’s analysis helps the team identify what is effective, do more of it, protect momentum, and make better decisions from the first posts through long-term growth.</p>
