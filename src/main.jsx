@@ -344,7 +344,7 @@ function ApplyPage() {
   const [sent, setSent] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState('')
-  const [form, setForm] = useState({ name: '', age: '', location: '', instagram: '', platforms: '', goals: '', contact: '', website: '' })
+  const [form, setForm] = useState({ name: '', age: '', cityState: '', instagram: '', platforms: '', goals: '', phone: '', telegram: '', website: '' })
   const update = (e) => setForm({ ...form, [e.target.name]: e.target.value })
   const submit = async (e) => {
     e.preventDefault()
@@ -375,11 +375,12 @@ function ApplyPage() {
         <label className="hidden-field">Website<input name="website" value={form.website} onChange={update} tabIndex="-1" autoComplete="off" /></label>
         <label>Full name or creator name<input name="name" value={form.name} onChange={update} required /></label>
         <label>Age<input name="age" inputMode="numeric" value={form.age} onChange={update} required placeholder="18+ only" /></label>
-        <label>City / country<input name="location" value={form.location} onChange={update} required /></label>
+        <label>City / state<input name="cityState" value={form.cityState} onChange={update} required /></label>
         <label>Instagram / TikTok / main social<input name="instagram" value={form.instagram} onChange={update} required /></label>
         <label>Current platforms<textarea name="platforms" value={form.platforms} onChange={update} placeholder="Where are you currently posting or monetizing?" /></label>
         <label>Goals<textarea name="goals" value={form.goals} onChange={update} required placeholder="What do you want help building?" /></label>
-        <label>Best contact<input name="contact" value={form.contact} onChange={update} required placeholder="Email, Telegram, WhatsApp, etc." /></label>
+        <label>Phone<input name="phone" type="tel" value={form.phone} onChange={update} required placeholder="Best phone number" /></label>
+        <label>Telegram <span className="optional">optional</span><input name="telegram" value={form.telegram} onChange={update} placeholder="@username or phone-linked Telegram" /></label>
         {error && <p className="form-error" role="alert">{error}</p>}
         <button className="button primary" type="submit" disabled={submitting}>{submitting ? 'Sending application…' : 'Submit application'} <ArrowRight size={18}/></button>
       </form>}

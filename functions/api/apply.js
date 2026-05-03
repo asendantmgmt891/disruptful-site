@@ -51,14 +51,15 @@ export async function onRequestPost({ request, env }) {
   const application = {
     name: clean(payload.name, 160),
     age: clean(payload.age, 20),
-    location: clean(payload.location, 160),
+    cityState: clean(payload.cityState || payload.location, 160),
     instagram: clean(payload.instagram, 220),
     platforms: clean(payload.platforms, 1200),
     goals: clean(payload.goals, 1600),
-    contact: clean(payload.contact, 220),
+    phone: clean(payload.phone || payload.contact, 220),
+    telegram: clean(payload.telegram, 220),
   }
 
-  const missing = ['name', 'age', 'location', 'instagram', 'goals', 'contact'].filter((key) => !application[key])
+  const missing = ['name', 'age', 'cityState', 'instagram', 'goals', 'phone'].filter((key) => !application[key])
   if (missing.length) {
     return json({ ok: false, error: 'Please complete all required fields.' }, 400)
   }
@@ -68,9 +69,10 @@ export async function onRequestPost({ request, env }) {
     '',
     field('Name / creator', application.name),
     field('Age', application.age),
-    field('Location', application.location),
+    field('City / state', application.cityState),
     field('Main social', application.instagram),
-    field('Best contact', application.contact),
+    field('Phone', application.phone),
+    field('Telegram', application.telegram),
     '',
     field('Current platforms', application.platforms),
     field('Goals', application.goals),
