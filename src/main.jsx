@@ -34,7 +34,7 @@ const skyLinks = [
 ]
 
 const models = [
-  { name: 'Featured Creator A', market: 'Lifestyle • Glamour • Premium social', status: 'Growing audience', tone: 'Confident, editorial, phone-first content built for consistent fan conversion.' },
+  { name: 'Veyra Stehl', slug: '/models/veyra-stehl', market: 'Lifestyle • Glamour • Premium social', status: 'Growing audience', tone: 'Confident, editorial, phone-first content built for consistent fan conversion.', instagram: 'https://www.instagram.com/veyrastehl/', premium: 'https://onlyfans.com/veyrastehl' },
   { name: 'Featured Creator B', market: 'Fitness • Swim • Travel', status: 'Launch phase', tone: 'Aspirational daily content with polished brand rails and strong cross-platform hooks.' },
   { name: 'Featured Creator C', market: 'Alt • Fashion • Personality-led', status: 'Selective showcase', tone: 'Distinctive creator voice, strong visual identity, and platform-native content arcs.' },
 ]
@@ -63,6 +63,7 @@ function App() {
     if (route === '/sky') return <SkyPage />
     if (route === '/sharon') return <SharonPage />
     if (route === '/models') return <ModelsPage />
+    if (route === '/models/veyra-stehl') return <ModelProfilePage model={models[0]} />
     return <HomePage navigate={navigate} />
   }, [route])
 
@@ -280,8 +281,58 @@ function ModelsPage({ navigate }) {
     <section className="section-pad">
       <div className="section-heading"><p className="eyebrow">Selected roster</p><h1>A selection of models we’re building with.</h1><p className="lede">The current roster is intentionally small. These cards are structured so real model names, photos, and bios can be dropped in as assets are approved.</p></div>
       <div className="model-grid">
-        {models.map((model, idx) => <article className="model-card" key={model.name}><div className={`model-art art-${idx + 1}`}><Star /></div><div><p className="status">{model.status}</p><h3>{model.name}</h3><p className="market">{model.market}</p><p>{model.tone}</p></div><a href="/apply" onClick={navigate('/apply')}>Collaborate with us <ChevronRight size={17}/></a></article>)}
+        {models.map((model, idx) => <article className="model-card" key={model.name}><div className={`model-art art-${idx + 1}`}><Star /></div><div><p className="status">{model.status}</p><h3>{model.name}</h3><p className="market">{model.market}</p><p>{model.tone}</p></div>{model.slug ? <a href={model.slug} onClick={navigate(model.slug)}>View profile <ChevronRight size={17}/></a> : <a href="/apply" onClick={navigate('/apply')}>Collaborate with us <ChevronRight size={17}/></a>}</article>)}
       </div>
+    </section>
+  )
+}
+
+function SensitiveLink({ href, children }) {
+  const [open, setOpen] = useState(false)
+  return (
+    <>
+      <button className="button dark" type="button" onClick={() => setOpen(true)}>{children}</button>
+      {open && <div className="modal-backdrop" role="presentation" onClick={() => setOpen(false)}>
+        <div className="sensitive-modal" role="dialog" aria-modal="true" aria-labelledby="sensitive-title" onClick={(event) => event.stopPropagation()}>
+          <button className="modal-close" type="button" onClick={() => setOpen(false)} aria-label="Close sensitive content notice"><X size={18}/></button>
+          <h2 id="sensitive-title">Sensitive Content</h2>
+          <p>This link may contain content that is not appropriate for all audiences.</p>
+          <a className="button modal-continue" href={href} target="_blank" rel="noreferrer">Continue</a>
+        </div>
+      </div>}
+    </>
+  )
+}
+
+function AdultPlatformLink({ href, children }) {
+  const host = new URL(href).hostname.replace(/^www\./, '')
+  const requiresNotice = host === 'onlyfans.com' || host.endsWith('.onlyfans.com') || host === 'mym.fans' || host.endsWith('.mym.fans')
+  if (requiresNotice) return <SensitiveLink href={href}>{children}</SensitiveLink>
+  return <a className="button dark" href={href} target="_blank" rel="noreferrer">{children}</a>
+}
+
+function ModelProfilePage({ model, navigate }) {
+  return (
+    <section className="section-pad model-profile-page">
+      <div className="profile-hero model-profile-hero">
+        <div className="portrait model-portrait"><span>VS</span></div>
+        <div>
+          <p className="eyebrow">Disruptful model</p>
+          <h1>{model.name}</h1>
+          <h2>{model.market}</h2>
+          <p className="lede">A polished creator profile built around confident visual identity, consistent audience growth, and premium social presentation.</p>
+          <div className="hero-actions">
+            <a className="button primary" href={model.instagram} target="_blank" rel="noreferrer">Instagram <ExternalLink size={18}/></a>
+            <AdultPlatformLink href={model.premium}>Premium platform <ExternalLink size={18}/></AdultPlatformLink>
+          </div>
+        </div>
+      </div>
+      <div className="cards three model-profile-cards">
+        <Feature icon={<Camera />} title="Visual direction" text="Editorial, phone-first content systems designed for consistent public-facing momentum." />
+        <Feature icon={<BarChart3 />} title="Audience growth" text="Social-safe growth strategy focused on profile polish, consistency, and measurable attention." />
+        <Feature icon={<LockKeyhole />} title="Discreet routing" text="External links that may contain mature content are protected by a sensitive-content confirmation step." />
+      </div>
+      <a className="button ghost" href="/models" onClick={navigate('/models')}>Back to models</a>
     </section>
   )
 }
