@@ -22,6 +22,7 @@ const team = {
     role: 'Data Intelligence & Performance Strategy',
     intro: 'Sharon turns content performance into clear decisions. Her analysis shows us what is actually effective, so we can do more of what works, stop wasting energy on what does not, and make each model’s strategy sharper and more profitable over time.',
     details: ['Reach and engagement analysis', 'Content performance intelligence', 'Audience behavior insights', 'Profitability-focused optimization'],
+    image: '/images/sharon.jpg',
   },
 }
 
@@ -251,10 +252,7 @@ function SharonPage({ navigate }) {
   return (
     <section className="section-pad profile-page sharon-page">
       <div className="profile-hero sharon-hero">
-        <div className="portrait data-portrait">
-          <div className="data-rings"><i></i><i></i><i></i></div>
-          <span>S</span>
-        </div>
+        <div className="portrait sharon-portrait photo-portrait"><img src={team.sharon.image} alt="Sharon" /></div>
         <div>
           <p className="eyebrow">Performance intelligence</p>
           <h1>Sharon</h1>
