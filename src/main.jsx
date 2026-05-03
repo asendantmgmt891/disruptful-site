@@ -288,18 +288,37 @@ function ModelsPage({ navigate }) {
 
 function ApplyPage() {
   const [sent, setSent] = useState(false)
-  const [form, setForm] = useState({ name: '', age: '', location: '', instagram: '', platforms: '', goals: '', contact: '' })
+  const [submitting, setSubmitting] = useState(false)
+  const [error, setError] = useState('')
+  const [form, setForm] = useState({ name: '', age: '', location: '', instagram: '', platforms: '', goals: '', contact: '', website: '' })
   const update = (e) => setForm({ ...form, [e.target.name]: e.target.value })
-  const submit = (e) => {
+  const submit = async (e) => {
     e.preventDefault()
-    localStorage.setItem('disruptful-application-draft', JSON.stringify({ ...form, submittedAt: new Date().toISOString() }))
-    setSent(true)
+    setSubmitting(true)
+    setError('')
+    const submittedAt = new Date().toISOString()
+    localStorage.setItem('disruptful-application-draft', JSON.stringify({ ...form, submittedAt }))
+    try {
+      const response = await fetch('/api/apply', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ ...form, submittedAt }),
+      })
+      const result = await response.json().catch(() => ({}))
+      if (!response.ok || !result.ok) throw new Error(result.error || 'Something went wrong. Please try again.')
+      setSent(true)
+    } catch (err) {
+      setError(err.message || 'Something went wrong. Please try again.')
+    } finally {
+      setSubmitting(false)
+    }
   }
   return (
     <section className="section-pad apply-page">
       <div className="section-heading"><p className="eyebrow">Model application</p><h1>Apply to work with Disruptful.</h1><p className="lede">Tell us where you are now and where you want to go. Applicants must be 18+.</p></div>
-      {sent ? <div className="success"><BadgeCheck /><h2>Application draft captured locally.</h2><p>For production, this form should be connected to Cloudflare Pages Functions or a secure intake system. Your local prototype flow is working.</p></div> :
+      {sent ? <div className="success"><BadgeCheck /><h2>Application received.</h2><p>Thanks for reaching out. The Disruptful team has your application and will review it soon.</p></div> :
       <form className="apply-form" onSubmit={submit}>
+        <label className="hidden-field">Website<input name="website" value={form.website} onChange={update} tabIndex="-1" autoComplete="off" /></label>
         <label>Full name or creator name<input name="name" value={form.name} onChange={update} required /></label>
         <label>Age<input name="age" inputMode="numeric" value={form.age} onChange={update} required placeholder="18+ only" /></label>
         <label>City / country<input name="location" value={form.location} onChange={update} required /></label>
@@ -307,7 +326,8 @@ function ApplyPage() {
         <label>Current platforms<textarea name="platforms" value={form.platforms} onChange={update} placeholder="Where are you currently posting or monetizing?" /></label>
         <label>Goals<textarea name="goals" value={form.goals} onChange={update} required placeholder="What do you want help building?" /></label>
         <label>Best contact<input name="contact" value={form.contact} onChange={update} required placeholder="Email, Telegram, WhatsApp, etc." /></label>
-        <button className="button primary" type="submit">Submit application <ArrowRight size={18}/></button>
+        {error && <p className="form-error" role="alert">{error}</p>}
+        <button className="button primary" type="submit" disabled={submitting}>{submitting ? 'Sending application…' : 'Submit application'} <ArrowRight size={18}/></button>
       </form>}
     </section>
   )
