@@ -34,7 +34,7 @@ const skyLinks = [
 ]
 
 const models = [
-  { name: 'Veyra Stehl', slug: '/models/veyra-stehl', market: 'Yoga • Fitness • Visual inspiration', status: 'Digital creator', tone: 'Yoga and fitness for visual inspiration — mainly for men, but all are welcome. Move better, stress less, and build a stronger mind and body.', instagram: 'https://www.instagram.com/veyrastehl/', premium: 'https://onlyfans.com/veyrastehl', image: '/images/models/veyra-stehl.jpg' },
+  { name: 'Veyra Stehl', slug: '/models/veyra-stehl', market: 'Yoga • Fitness • Visual inspiration', status: 'Digital creator', tone: 'Yoga and fitness for visual inspiration — mainly for men, but all are welcome. Move better, stress less, and build a stronger mind and body.', instagram: 'https://www.instagram.com/veyrastehl/', premium: 'https://onlyfans.com/veyrastehl', image: '/images/models/veyra-stehl.jpg', gallery: ['/images/models/veyra-stehl-yoga-rocks.jpg'] },
   { name: 'Featured Creator B', market: 'Fitness • Swim • Travel', status: 'Launch phase', tone: 'Aspirational daily content with polished brand rails and strong cross-platform hooks.' },
   { name: 'Featured Creator C', market: 'Alt • Fashion • Personality-led', status: 'Selective showcase', tone: 'Distinctive creator voice, strong visual identity, and platform-native content arcs.' },
 ]
@@ -332,6 +332,9 @@ function ModelProfilePage({ model, navigate }) {
         <Feature icon={<BarChart3 />} title="Audience growth" text="Social-safe growth strategy focused on profile polish, consistency, and measurable attention." />
         <Feature icon={<LockKeyhole />} title="Discreet routing" text="External links that may contain mature content are protected by a sensitive-content confirmation step." />
       </div>
+      {model.gallery?.length ? <div className="model-gallery" aria-label={`${model.name} photo gallery`}>
+        {model.gallery.map((image, index) => <img key={image} src={image} alt={`${model.name} yoga and fitness photo ${index + 1}`} />)}
+      </div> : null}
       <a className="button ghost" href="/models" onClick={navigate('/models')}>Back to models</a>
     </section>
   )
