@@ -23,8 +23,18 @@ const field = (label, value) => {
   return normalized ? `<b>${label}:</b> ${escapeHtml(normalized)}` : `<b>${label}:</b> —`
 }
 
+const normalizeBotToken = (value) => clean(value, 300).replace(/^`|`$/g, '')
+
+const normalizeChatId = (value) =>
+  clean(value, 80)
+    .replace(/^`|`$/g, '')
+    .replace(/^[−–—]/, '-')
+
 export async function onRequestPost({ request, env }) {
-  if (!env.TELEGRAM_BOT_TOKEN || !env.TELEGRAM_CHAT_ID) {
+  const botToken = normalizeBotToken(env.TELEGRAM_BOT_TOKEN)
+  const chatId = normalizeChatId(env.TELEGRAM_CHAT_ID)
+
+  if (!botToken || !chatId) {
     return json({ ok: false, error: 'Application delivery is not configured yet.' }, 503)
   }
 
@@ -68,11 +78,11 @@ export async function onRequestPost({ request, env }) {
     `<i>Submitted from ${escapeHtml(new URL(request.url).origin)}</i>`,
   ].join('\n')
 
-  const telegramResponse = await fetch(`https://api.telegram.org/bot${env.TELEGRAM_BOT_TOKEN}/sendMessage`, {
+  const telegramResponse = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
     body: JSON.stringify({
-      chat_id: env.TELEGRAM_CHAT_ID,
+      chat_id: chatId,
       text: message,
       parse_mode: 'HTML',
       disable_web_page_preview: true,
@@ -80,7 +90,15 @@ export async function onRequestPost({ request, env }) {
   })
 
   if (!telegramResponse.ok) {
-    return json({ ok: false, error: 'Application could not be delivered. Please try again.' }, 502)
+    const telegramError = await telegramResponse.json().catch(() => ({}))
+    return json(
+      {
+        ok: false,
+        error: 'Application could not be delivered. Please try again.',
+        detail: telegramError.description || `Telegram HTTP ${telegramResponse.status}`,
+      },
+      502,
+    )
   }
 
   return json({ ok: true })
