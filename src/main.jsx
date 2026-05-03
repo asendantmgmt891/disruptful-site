@@ -35,8 +35,8 @@ const skyLinks = [
 ]
 
 const models = [
-  { name: 'Veyra Stehl', slug: '/models/veyra-stehl', market: 'Yoga • Fitness • Visual inspiration', status: 'Digital creator', tone: 'Yoga and fitness for visual inspiration — mainly for men, but all are welcome. Move better, stress less, and build a stronger mind and body.', instagram: 'https://www.instagram.com/veyrastehl/', premium: 'https://onlyfans.com/veyrastehl', image: '/images/models/veyra-stehl.jpg', gallery: ['/images/models/veyra-stehl-yoga-rocks.jpg', '/images/models/veyra-stehl-profile-side.jpg', '/images/models/veyra-stehl-yoga-lunge.jpg', '/images/models/veyra-stehl-blue-studio.jpg', '/images/models/veyra-stehl-sunlit-portrait.jpg', '/images/models/veyra-stehl-car-duo.jpg', '/images/models/veyra-stehl-car-portrait.jpg'] },
-  { name: 'Featured Creator B', market: 'Fitness • Swim • Travel', status: 'Launch phase', tone: 'Aspirational daily content with polished brand rails and strong cross-platform hooks.' },
+  { name: 'Veyra Stehl', slug: '/models/veyra-stehl', market: 'Yoga • Fitness • Visual inspiration', status: 'Digital creator', tone: 'Yoga and fitness for visual inspiration — mainly for men, but all are welcome. Move better, stress less, and build a stronger mind and body.', description: 'Yoga and fitness for visual inspiration — mainly for men, but all are welcome. Move better, stress less, and build a stronger mind and body.', instagram: 'https://www.instagram.com/veyrastehl/', premium: 'https://onlyfans.com/veyrastehl', image: '/images/models/veyra-stehl.jpg', gallery: ['/images/models/veyra-stehl-yoga-rocks.jpg', '/images/models/veyra-stehl-profile-side.jpg', '/images/models/veyra-stehl-yoga-lunge.jpg', '/images/models/veyra-stehl-blue-studio.jpg', '/images/models/veyra-stehl-sunlit-portrait.jpg', '/images/models/veyra-stehl-car-duo.jpg', '/images/models/veyra-stehl-car-portrait.jpg'] },
+  { name: 'Emyra Vesce', slug: '/models/emyra-vesce', market: 'Lifestyle • Fashion • Visual inspiration', status: 'Digital creator', tone: 'A polished visual presence with confident lifestyle and fashion-forward content direction.', description: 'A digital creator with a polished visual presence, confident lifestyle imagery, and fashion-forward content direction.', image: '/images/models/emyra-vesce.jpg' },
   { name: 'Featured Creator C', market: 'Alt • Fashion • Personality-led', status: 'Selective showcase', tone: 'Distinctive creator voice, strong visual identity, and platform-native content arcs.' },
 ]
 
@@ -65,6 +65,7 @@ function App() {
     if (route === '/sharon') return <SharonPage />
     if (route === '/models') return <ModelsPage />
     if (route === '/models/veyra-stehl') return <ModelProfilePage model={models[0]} />
+    if (route === '/models/emyra-vesce') return <ModelProfilePage model={models[1]} />
     return <HomePage navigate={navigate} />
   }, [route])
 
@@ -321,11 +322,11 @@ function ModelProfilePage({ model, navigate }) {
           <p className="eyebrow">Digital Creator</p>
           <h1>{model.name}</h1>
           <h2>{model.market}</h2>
-          <p className="lede">Yoga and fitness for visual inspiration — mainly for men, but all are welcome. Move better, stress less, and build a stronger mind and body.</p>
-          <div className="hero-actions">
-            <a className="button primary" href={model.instagram} target="_blank" rel="noreferrer">Instagram <ExternalLink size={18}/></a>
-            <AdultPlatformLink href={model.premium}>Premium platform <ExternalLink size={18}/></AdultPlatformLink>
-          </div>
+          <p className="lede">{model.description || model.tone}</p>
+          {(model.instagram || model.premium) ? <div className="hero-actions">
+            {model.instagram ? <a className="button primary" href={model.instagram} target="_blank" rel="noreferrer">Instagram <ExternalLink size={18}/></a> : null}
+            {model.premium ? <AdultPlatformLink href={model.premium}>Premium platform <ExternalLink size={18}/></AdultPlatformLink> : null}
+          </div> : null}
         </div>
       </div>
       {model.gallery?.length ? <div className="model-gallery" aria-label={`${model.name} photo gallery`}>
