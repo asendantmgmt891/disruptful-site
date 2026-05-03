@@ -109,6 +109,10 @@ p { color: var(--muted); line-height: 1.65; }
 .model-card > div:not(.model-art), .model-card a { padding: 0 20px 20px; }
 .model-card a { display: inline-flex; align-items: center; gap: 5px; color: var(--champagne); font-weight: 800; }
 .model-art { height: 230px; display: grid; place-items: center; margin-bottom: 20px; background: linear-gradient(135deg, rgba(240,217,166,.75), rgba(225,124,147,.46)); }
+.model-card .model-art-link { display: grid; padding: 0; color: inherit; overflow: hidden; }
+.model-art-link img { transition: transform .32s ease, filter .32s ease; }
+.model-art-link:hover img, .model-art-link:focus-visible img { transform: scale(1.035); filter: saturate(1.04) contrast(1.04); }
+.model-art-link:focus-visible { outline: 3px solid rgba(240,217,166,.7); outline-offset: -3px; }
 .model-art img { width: 100%; height: 100%; object-fit: cover; object-position: center 42%; }
 .model-art svg { width: 52px; height: 52px; color: rgba(255,255,255,.75); }
 .art-2 { background: linear-gradient(135deg, rgba(125,108,255,.7), rgba(240,217,166,.42)); }
