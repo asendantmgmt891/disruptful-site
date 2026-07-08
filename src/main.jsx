@@ -294,20 +294,32 @@ function ModelsPage({ navigate }) {
 
 function PremiumSitesLink({ links }) {
   const [open, setOpen] = useState(false)
+  const [ageVerified, setAgeVerified] = useState(false)
   const availableLinks = links.filter((link) => link.href)
   if (!availableLinks.length) return null
+
+  const closeModal = () => {
+    setOpen(false)
+    setAgeVerified(false)
+  }
 
   return (
     <>
       <button className="button dark" type="button" onClick={() => setOpen(true)}>Premium sites <ExternalLink size={18}/></button>
-      {open && <div className="modal-backdrop" role="presentation" onClick={() => setOpen(false)}>
+      {open && <div className="modal-backdrop" role="presentation" onClick={closeModal}>
         <div className="sensitive-modal" role="dialog" aria-modal="true" aria-labelledby="premium-sites-title" onClick={(event) => event.stopPropagation()}>
-          <button className="modal-close" type="button" onClick={() => setOpen(false)} aria-label="Close sensitive content notice"><X size={18}/></button>
-          <h2 id="premium-sites-title">Sensitive Content</h2>
-          <p>These links may contain content that is not appropriate for all audiences.</p>
-          <div className="premium-site-options">
-            {availableLinks.map((link) => <a key={link.label} className="button modal-continue" href={link.href} target="_blank" rel="noreferrer">{link.label}</a>)}
-          </div>
+          <button className="modal-close" type="button" onClick={closeModal} aria-label="Close sensitive content notice"><X size={18}/></button>
+          {!ageVerified ? <>
+            <h2 id="premium-sites-title">Sensitive Content</h2>
+            <p>These links may contain content that is not appropriate for all audiences.</p>
+            <button className="button modal-continue" type="button" onClick={() => setAgeVerified(true)}>I am over 18</button>
+          </> : <>
+            <h2 id="premium-sites-title">Premium sites</h2>
+            <p>Choose a site to continue.</p>
+            <div className="premium-site-options">
+              {availableLinks.map((link) => <a key={link.label} className="button modal-continue" href={link.href} target="_blank" rel="noreferrer">{link.label}</a>)}
+            </div>
+          </>}
         </div>
       </div>}
     </>
