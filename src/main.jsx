@@ -292,28 +292,26 @@ function ModelsPage({ navigate }) {
   )
 }
 
-function SensitiveLink({ href, children }) {
+function PremiumSitesLink({ links }) {
   const [open, setOpen] = useState(false)
+  const availableLinks = links.filter((link) => link.href)
+  if (!availableLinks.length) return null
+
   return (
     <>
-      <button className="button dark" type="button" onClick={() => setOpen(true)}>{children}</button>
+      <button className="button dark" type="button" onClick={() => setOpen(true)}>Premium sites <ExternalLink size={18}/></button>
       {open && <div className="modal-backdrop" role="presentation" onClick={() => setOpen(false)}>
-        <div className="sensitive-modal" role="dialog" aria-modal="true" aria-labelledby="sensitive-title" onClick={(event) => event.stopPropagation()}>
+        <div className="sensitive-modal" role="dialog" aria-modal="true" aria-labelledby="premium-sites-title" onClick={(event) => event.stopPropagation()}>
           <button className="modal-close" type="button" onClick={() => setOpen(false)} aria-label="Close sensitive content notice"><X size={18}/></button>
-          <h2 id="sensitive-title">Sensitive Content</h2>
-          <p>This link may contain content that is not appropriate for all audiences.</p>
-          <a className="button modal-continue" href={href} target="_blank" rel="noreferrer">Continue</a>
+          <h2 id="premium-sites-title">Sensitive Content</h2>
+          <p>These links may contain content that is not appropriate for all audiences.</p>
+          <div className="premium-site-options">
+            {availableLinks.map((link) => <a key={link.label} className="button modal-continue" href={link.href} target="_blank" rel="noreferrer">{link.label}</a>)}
+          </div>
         </div>
       </div>}
     </>
   )
-}
-
-function AdultPlatformLink({ href, children }) {
-  const host = new URL(href).hostname.replace(/^www\./, '')
-  const requiresNotice = host === 'onlyfans.com' || host.endsWith('.onlyfans.com') || host === 'mym.fans' || host.endsWith('.mym.fans')
-  if (requiresNotice) return <SensitiveLink href={href}>{children}</SensitiveLink>
-  return <a className="button dark" href={href} target="_blank" rel="noreferrer">{children}</a>
 }
 
 function ModelProfilePage({ model, navigate }) {
@@ -328,8 +326,7 @@ function ModelProfilePage({ model, navigate }) {
           <p className="lede">{model.description || model.tone}</p>
           {(model.instagram || model.premium || model.mym) ? <div className="hero-actions">
             {model.instagram ? <a className="button primary" href={model.instagram} target="_blank" rel="noreferrer">Instagram <ExternalLink size={18}/></a> : null}
-            {model.premium ? <AdultPlatformLink href={model.premium}>OnlyFans <ExternalLink size={18}/></AdultPlatformLink> : null}
-            {model.mym ? <AdultPlatformLink href={model.mym}>MYM <ExternalLink size={18}/></AdultPlatformLink> : null}
+            <PremiumSitesLink links={[{ label: 'OnlyFans', href: model.premium }, { label: 'MYM', href: model.mym }]} />
           </div> : null}
         </div>
       </div>
