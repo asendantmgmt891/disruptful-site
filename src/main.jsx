@@ -69,6 +69,9 @@ function App() {
     if (route === '/models/veyra-stehl') return <ModelProfilePage model={models[0]} />
     if (route === '/models/emyra-vesce') return <ModelProfilePage model={models[1]} />
     if (route === '/models/siyenna-luyxe') return <ModelProfilePage model={models[2]} />
+    if (route === '/premium/veyra-stehl') return <PremiumSitesPage model={models[0]} />
+    if (route === '/premium/emyra-vesce') return <PremiumSitesPage model={models[1]} />
+    if (route === '/premium/siyenna-luyxe') return <PremiumSitesPage model={models[2]} />
     return <HomePage navigate={navigate} />
   }, [route])
 
@@ -292,37 +295,39 @@ function ModelsPage({ navigate }) {
   )
 }
 
-function PremiumSitesLink({ links }) {
-  const [open, setOpen] = useState(false)
-  const [ageVerified, setAgeVerified] = useState(false)
-  const availableLinks = links.filter((link) => link.href)
-  if (!availableLinks.length) return null
+function PremiumSitesLink({ premiumSlug, navigate }) {
+  // 2026-09-29 (Edgar): previously this rendered an on-page modal, so the
+  // model's own profile page -- the exact page linked from the Instagram
+  // bio -- always contained a "Premium sites" button plus, after two
+  // clicks, direct OnlyFans/MYM links, all in the same document Instagram
+  // reviews when evaluating bio-link recommendability. Moved to a plain
+  // navigation to a separate, unlinked page (see PremiumSitesPage) so the
+  // profile page itself never references premium platforms at all. The
+  // age-verification step is unchanged, just relocated with it.
+  return <a className="button dark" href={premiumSlug} onClick={navigate(premiumSlug)}>Premium sites <ExternalLink size={18}/></a>
+}
 
-  const closeModal = () => {
-    setOpen(false)
-    setAgeVerified(false)
-  }
+function PremiumSitesPage({ model, navigate }) {
+  const [ageVerified, setAgeVerified] = useState(false)
+  const availableLinks = [{ label: 'OnlyFans', href: model.premium }, { label: 'MYM', href: model.mym }].filter((link) => link.href)
 
   return (
-    <>
-      <button className="button dark" type="button" onClick={() => setOpen(true)}>Premium sites <ExternalLink size={18}/></button>
-      {open && <div className="modal-backdrop" role="presentation" onClick={closeModal}>
-        <div className="sensitive-modal" role="dialog" aria-modal="true" aria-labelledby="premium-sites-title" onClick={(event) => event.stopPropagation()}>
-          <button className="modal-close" type="button" onClick={closeModal} aria-label="Close sensitive content notice"><X size={18}/></button>
-          {!ageVerified ? <>
-            <h2 id="premium-sites-title">Sensitive Content</h2>
-            <p>These links may contain content that is not appropriate for all audiences.</p>
-            <button className="button modal-continue" type="button" onClick={() => setAgeVerified(true)}>I am over 18</button>
-          </> : <>
-            <h2 id="premium-sites-title">Premium sites</h2>
-            <p>Choose a site to continue.</p>
-            <div className="premium-site-options">
-              {availableLinks.map((link) => <a key={link.label} className="button modal-continue" href={link.href} target="_blank" rel="noreferrer">{link.label}</a>)}
-            </div>
-          </>}
-        </div>
-      </div>}
-    </>
+    <section className="section-pad sensitive-page">
+      <div className="sensitive-page-card" role="dialog" aria-labelledby="premium-sites-title">
+        {!ageVerified ? <>
+          <h1 id="premium-sites-title">Sensitive Content</h1>
+          <p>These links may contain content that is not appropriate for all audiences.</p>
+          <button className="button modal-continue" type="button" onClick={() => setAgeVerified(true)}>I am over 18</button>
+        </> : <>
+          <h1 id="premium-sites-title">Premium sites</h1>
+          <p>Choose a site to continue.</p>
+          <div className="premium-site-options">
+            {availableLinks.map((link) => <a key={link.label} className="button modal-continue" href={link.href} target="_blank" rel="noreferrer">{link.label}</a>)}
+          </div>
+        </>}
+        <a className="button ghost" href={model.slug} onClick={navigate(model.slug)}>Back to {model.name}</a>
+      </div>
+    </section>
   )
 }
 
@@ -338,7 +343,7 @@ function ModelProfilePage({ model, navigate }) {
           <p className="lede">{model.description || model.tone}</p>
           {(model.instagram || model.premium || model.mym) ? <div className="hero-actions">
             {model.instagram ? <a className="button primary" href={model.instagram} target="_blank" rel="noreferrer">Instagram <ExternalLink size={18}/></a> : null}
-            <PremiumSitesLink links={[{ label: 'OnlyFans', href: model.premium }, { label: 'MYM', href: model.mym }]} />
+            {(model.premium || model.mym) ? <PremiumSitesLink premiumSlug={model.slug.replace('/models/', '/premium/')} navigate={navigate} /> : null}
           </div> : null}
         </div>
       </div>
