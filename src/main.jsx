@@ -46,6 +46,42 @@ function pathName() {
   return window.location.pathname.replace(/\/$/, '') || '/'
 }
 
+// Cloudflare Web Analytics auto-tracks page views on every path, including
+// SPA soft-navigations driven by history.pushState (which navigate() below
+// uses) -- so /models/<slug> and /premium/<slug> page views are covered once
+// a token is configured. Only loads if VITE_CF_BEACON_TOKEN is set at build
+// time (Cloudflare Pages project env var), so it's a no-op until the Web
+// Analytics site is created in the dashboard and the token is wired up.
+function initWebAnalytics() {
+  const token = import.meta.env.VITE_CF_BEACON_TOKEN
+  if (!token) return
+  const script = document.createElement('script')
+  script.type = 'module'
+  script.src = 'https://static.cloudflareinsights.com/beacon.min.js'
+  script.setAttribute('data-cf-beacon', JSON.stringify({ token }))
+  document.head.appendChild(script)
+}
+initWebAnalytics()
+
+// Cloudflare Web Analytics has no public custom-events API for the standard
+// beacon (only automatic page views + web vitals). To distinguish OnlyFans
+// vs MYM clicks per model, briefly push a synthetic path so the beacon's
+// SPA soft-navigation tracking records it as a page view, then immediately
+// restore the real URL via replaceState so the address bar and back button
+// are unaffected. This never calls preventDefault, so the actual link
+// (opened in a new tab) navigates instantly and is never delayed.
+function trackPremiumClick(platform, model) {
+  try {
+    const modelKey = model.slug.split('/').pop()
+    const eventPath = `/events/premium-click/${platform.toLowerCase()}/${modelKey}`
+    const realPath = window.location.pathname + window.location.search
+    window.history.pushState(null, '', eventPath)
+    window.history.replaceState(null, '', realPath)
+  } catch (err) {
+    // analytics must never block navigation
+  }
+}
+
 function App() {
   const [route, setRoute] = useState(pathName())
   const navigate = (href) => (event) => {
@@ -309,7 +345,7 @@ function PremiumSitesLink({ premiumSlug, navigate }) {
 
 function PremiumSitesPage({ model, navigate }) {
   const [ageVerified, setAgeVerified] = useState(false)
-  const availableLinks = [{ label: 'OnlyFans', href: model.premium }, { label: 'MYM', href: model.mym }].filter((link) => link.href)
+  const availableLinks = [{ label: 'OF', href: model.premium }, { label: 'MYM', href: model.mym }].filter((link) => link.href)
 
   return (
     <section className="section-pad sensitive-page">
@@ -322,7 +358,7 @@ function PremiumSitesPage({ model, navigate }) {
           <h1 id="premium-sites-title">Premium sites</h1>
           <p>Choose a site to continue.</p>
           <div className="premium-site-options">
-            {availableLinks.map((link) => <a key={link.label} className="button modal-continue" href={link.href} target="_blank" rel="noreferrer">{link.label}</a>)}
+            {availableLinks.map((link) => <a key={link.label} className="button modal-continue" href={link.href} target="_blank" rel="noreferrer" onClick={() => trackPremiumClick(link.label, model)}>{link.label}</a>)}
           </div>
         </>}
         <a className="button ghost" href={model.slug} onClick={navigate(model.slug)}>Back to {model.name}</a>
