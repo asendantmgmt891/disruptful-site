@@ -37,9 +37,19 @@ const skyLinks = [
 ]
 
 const models = [
-  { name: 'Veyra Stehl', slug: '/models/veyra-stehl', market: 'Yoga • Fitness • Visual inspiration', status: 'Digital creator', tone: 'Yoga and fitness for visual inspiration — mainly for men, but all are welcome. Move better, stress less, and build a stronger mind and body.', description: 'Yoga and fitness for visual inspiration — mainly for men, but all are welcome. Move better, stress less, and build a stronger mind and body.', instagram: 'https://www.instagram.com/veyrastehl/', x: 'https://x.com/veyrastehl', tiktok: 'https://www.tiktok.com/@veyrastehl', premium: 'https://onlyfans.com/veyrastehl', mym: 'https://mym.fans/Veyrastehl', image: '/images/models/veyra-stehl.jpg', gallery: ['/images/models/veyra-stehl-yoga-rocks.jpg', '/images/models/veyra-stehl-profile-side.jpg', '/images/models/veyra-stehl-yoga-lunge.jpg', '/images/models/veyra-stehl-blue-studio.jpg', '/images/models/veyra-stehl-sunlit-portrait.jpg', '/images/models/veyra-stehl-car-duo.jpg', '/images/models/veyra-stehl-car-portrait.jpg'] },
-  { name: 'Emyra Vesce', slug: '/models/emyra-vesce', market: 'Lifestyle • Fashion • Visual inspiration', status: 'Digital creator', tone: 'A polished visual presence with confident lifestyle and fashion-forward content direction.', description: 'A digital creator with a polished visual presence, confident lifestyle imagery, and fashion-forward content direction.', instagram: 'https://www.instagram.com/emyravesce/', premium: 'https://onlyfans.com/emyravesce', mym: 'https://mym.fans/Emyravesce', image: '/images/models/emyra-vesce.jpg', gallery: ['/images/models/emyra-vesce-purple-studio.jpg', '/images/models/emyra-vesce-red-car.jpg', '/images/models/emyra-vesce-car-interior.jpg', '/images/models/emyra-vesce-side-car.jpg', '/images/models/emyra-vesce-sunlit-closeup.jpg', '/images/models/emyra-vesce-car-exterior.jpg', '/images/models/emyra-vesce-yellow-car-closeup.jpg', '/images/models/emyra-vesce-in-car-duo.jpg', '/images/models/emyra-vesce-graffiti-yoga.jpg', '/images/models/emyra-vesce-graffiti-cobra.jpg', '/images/models/emyra-vesce-outdoor-backbend.jpg'] },
-  { name: 'Siyenna Luyxe', slug: '/models/siyenna-luyxe', market: 'Desert • Fitness • Visual inspiration', status: 'Digital creator', tone: 'A confident visual creator with desert-lit fitness imagery and bold, polished brand presence.', description: 'A digital creator with confident desert-lit fitness imagery, bold visual identity, and polished brand presence.', instagram: 'https://www.instagram.com/siyennaluyxe/', x: 'https://x.com/siyennaluyxe', tiktok: 'https://www.tiktok.com/@siyennaluyxe', premium: 'https://onlyfans.com/siyennaluyxe', mym: 'https://mym.fans/Siyennaluyxe', image: '/images/models/siyenna-luyxe.jpg', gallery: ['/images/models/siyenna-luyxe-seated-yoga.jpg', '/images/models/siyenna-luyxe-desert-pink.jpg', '/images/models/siyenna-luyxe-desert-black.jpg', '/images/models/siyenna-luyxe-desert-turquoise.jpg'] },
+  // 2026-10-01 (Edgar): premium/mym real URLs were previously inlined here,
+  // which meant they shipped in plain text inside the static JS bundle --
+  // visible to any crawler/scanner that fetches the page source, regardless
+  // of the client-side "I am over 18" gate on the premium page. That almost
+  // certainly contributed to Instagram's Recommendation Guidelines flag on
+  // Veyra's bio link. Real destination URLs now live server-side only, in
+  // functions/api/premium-links.js, and are fetched by PremiumSitesPage
+  // only after the age-gate is passed -- `hasPremium` just preserves the
+  // existing UI logic (show the "Premium sites" button) without shipping
+  // the actual link.
+  { name: 'Veyra Stehl', slug: '/models/veyra-stehl', market: 'Yoga • Fitness • Visual inspiration', status: 'Digital creator', tone: 'Yoga and fitness for visual inspiration — mainly for men, but all are welcome. Move better, stress less, and build a stronger mind and body.', description: 'Yoga and fitness for visual inspiration — mainly for men, but all are welcome. Move better, stress less, and build a stronger mind and body.', instagram: 'https://www.instagram.com/veyrastehl/', x: 'https://x.com/veyrastehl', tiktok: 'https://www.tiktok.com/@veyrastehl', hasPremium: true, image: '/images/models/veyra-stehl.jpg', gallery: ['/images/models/veyra-stehl-yoga-rocks.jpg', '/images/models/veyra-stehl-profile-side.jpg', '/images/models/veyra-stehl-yoga-lunge.jpg', '/images/models/veyra-stehl-blue-studio.jpg', '/images/models/veyra-stehl-sunlit-portrait.jpg', '/images/models/veyra-stehl-car-duo.jpg', '/images/models/veyra-stehl-car-portrait.jpg'] },
+  { name: 'Emyra Vesce', slug: '/models/emyra-vesce', market: 'Lifestyle • Fashion • Visual inspiration', status: 'Digital creator', tone: 'A polished visual presence with confident lifestyle and fashion-forward content direction.', description: 'A digital creator with a polished visual presence, confident lifestyle imagery, and fashion-forward content direction.', instagram: 'https://www.instagram.com/emyravesce/', hasPremium: true, image: '/images/models/emyra-vesce.jpg', gallery: ['/images/models/emyra-vesce-purple-studio.jpg', '/images/models/emyra-vesce-red-car.jpg', '/images/models/emyra-vesce-car-interior.jpg', '/images/models/emyra-vesce-side-car.jpg', '/images/models/emyra-vesce-sunlit-closeup.jpg', '/images/models/emyra-vesce-car-exterior.jpg', '/images/models/emyra-vesce-yellow-car-closeup.jpg', '/images/models/emyra-vesce-in-car-duo.jpg', '/images/models/emyra-vesce-graffiti-yoga.jpg', '/images/models/emyra-vesce-graffiti-cobra.jpg', '/images/models/emyra-vesce-outdoor-backbend.jpg'] },
+  { name: 'Siyenna Luyxe', slug: '/models/siyenna-luyxe', market: 'Desert • Fitness • Visual inspiration', status: 'Digital creator', tone: 'A confident visual creator with desert-lit fitness imagery and bold, polished brand presence.', description: 'A digital creator with confident desert-lit fitness imagery, bold visual identity, and polished brand presence.', instagram: 'https://www.instagram.com/siyennaluyxe/', x: 'https://x.com/siyennaluyxe', tiktok: 'https://www.tiktok.com/@siyennaluyxe', hasPremium: true, image: '/images/models/siyenna-luyxe.jpg', gallery: ['/images/models/siyenna-luyxe-seated-yoga.jpg', '/images/models/siyenna-luyxe-desert-pink.jpg', '/images/models/siyenna-luyxe-desert-black.jpg', '/images/models/siyenna-luyxe-desert-turquoise.jpg'] },
 ]
 
 function pathName() {
@@ -345,7 +355,24 @@ function PremiumSitesLink({ premiumSlug, navigate }) {
 
 function PremiumSitesPage({ model, navigate }) {
   const [ageVerified, setAgeVerified] = useState(false)
-  const availableLinks = [{ label: 'OF', href: model.premium }, { label: 'MYM', href: model.mym }].filter((link) => link.href)
+  const [links, setLinks] = useState(null)
+  const [linksError, setLinksError] = useState(false)
+
+  const confirmAge = () => {
+    setAgeVerified(true)
+    // Real destination URLs are fetched here, not before -- they never
+    // appear in the static page/bundle a crawler fetches without running
+    // this click handler. See the comment on the `models` array above.
+    const slug = model.slug.replace('/models/', '')
+    fetch(`/api/premium-links?slug=${encodeURIComponent(slug)}`)
+      .then((res) => { if (!res.ok) throw new Error('bad response'); return res.json() })
+      .then((data) => setLinks(data))
+      .catch(() => setLinksError(true))
+  }
+
+  const availableLinks = links
+    ? [{ label: 'OF', href: links.premium }, { label: 'MYM', href: links.mym }].filter((link) => link.href)
+    : []
 
   return (
     <section className="section-pad sensitive-page">
@@ -353,13 +380,15 @@ function PremiumSitesPage({ model, navigate }) {
         {!ageVerified ? <>
           <h1 id="premium-sites-title">Sensitive Content</h1>
           <p>These links may contain content that is not appropriate for all audiences.</p>
-          <button className="button modal-continue" type="button" onClick={() => setAgeVerified(true)}>I am over 18</button>
+          <button className="button modal-continue" type="button" onClick={confirmAge}>I am over 18</button>
         </> : <>
           <h1 id="premium-sites-title">Premium sites</h1>
-          <p>Choose a site to continue.</p>
-          <div className="premium-site-options">
-            {availableLinks.map((link) => <a key={link.label} className="button modal-continue" href={link.href} target="_blank" rel="noreferrer" onClick={() => trackPremiumClick(link.label, model)}>{link.label}</a>)}
-          </div>
+          {linksError ? <p>Something went wrong loading these links. Please try again.</p> : !links ? <p>Loading…</p> : <>
+            <p>Choose a site to continue.</p>
+            <div className="premium-site-options">
+              {availableLinks.map((link) => <a key={link.label} className="button modal-continue" href={link.href} target="_blank" rel="noreferrer" onClick={() => trackPremiumClick(link.label, model)}>{link.label}</a>)}
+            </div>
+          </>}
         </>}
         <a className="button ghost" href={model.slug} onClick={navigate(model.slug)}>Back to {model.name}</a>
       </div>
@@ -377,11 +406,11 @@ function ModelProfilePage({ model, navigate }) {
           <h1>{model.name}</h1>
           <h2>{model.market}</h2>
           <p className="lede">{model.description || model.tone}</p>
-          {(model.instagram || model.x || model.tiktok || model.premium || model.mym) ? <div className="hero-actions">
+          {(model.instagram || model.x || model.tiktok || model.hasPremium) ? <div className="hero-actions">
             {model.instagram ? <a className="button primary" href={model.instagram} target="_blank" rel="noreferrer">Instagram <ExternalLink size={18}/></a> : null}
             {model.tiktok ? <a className="button primary" href={model.tiktok} target="_blank" rel="noreferrer">TikTok <ExternalLink size={18}/></a> : null}
             {model.x ? <a className="button primary" href={model.x} target="_blank" rel="noreferrer">X <ExternalLink size={18}/></a> : null}
-            {(model.premium || model.mym) ? <PremiumSitesLink premiumSlug={model.slug.replace('/models/', '/premium/')} navigate={navigate} /> : null}
+            {model.hasPremium ? <PremiumSitesLink premiumSlug={model.slug.replace('/models/', '/premium/')} navigate={navigate} /> : null}
           </div> : null}
         </div>
       </div>
