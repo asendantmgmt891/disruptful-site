@@ -1,14 +1,14 @@
-// Real OnlyFans/MYM destination URLs, served only on request -- never
-// present in the static site bundle. The client (PremiumSitesPage in
-// src/main.jsx) only calls this after the visitor passes the "I am over
-// 18" gate, so a crawler/scanner fetching the page source or JS bundle
-// alone never sees these URLs the way it previously did when they were
-// inlined in the client-side `models` array.
-const PREMIUM_LINKS = {
-  'veyra-stehl': { premium: 'https://onlyfans.com/veyrastehl', mym: 'https://mym.fans/Veyrastehl' },
-  'emyra-vesce': { premium: 'https://onlyfans.com/emyravesce', mym: 'https://mym.fans/Emyravesce' },
-  'siyenna-luyxe': { premium: 'https://onlyfans.com/siyennaluyxe', mym: 'https://mym.fans/Siyennaluyxe' },
-}
+// Tells the client which premium buttons to show (OF / MYM / both) for a
+// model, without ever exposing the real destination URL -- the client only
+// gets booleans now, since clicking navigates to the same-origin /go/<platform>/<slug>
+// redirect (see functions/go/[platform]/[slug].js) instead of the raw link.
+// 2026-10-19 (Edgar): previously returned the real URLs directly post-age-gate;
+// moved to same-origin redirect links so OF/MYM clicks become real, countable
+// server hits (Cloudflare per-path analytics) instead of an unreliable
+// client-side-only history trick, as a side effect this is also strictly more
+// private -- the real URL now never reaches the client at all, not even after
+// the age gate.
+import { PREMIUM_LINKS } from '../_lib/premiumLinks.js'
 
 const json = (body, status = 200) =>
   new Response(JSON.stringify(body), {
@@ -20,7 +20,7 @@ export async function onRequestGet({ request }) {
   const slug = new URL(request.url).searchParams.get('slug') || ''
   const links = PREMIUM_LINKS[slug]
   if (!links) return json({ error: 'Unknown model.' }, 404)
-  return json(links)
+  return json({ premium: Boolean(links.premium), mym: Boolean(links.mym) })
 }
 
 export async function onRequest() {

@@ -34,25 +34,23 @@ The application form is frontend-only for the local prototype. For production, c
 
 ## Web Analytics (page views + premium-link clicks)
 
-The site loads the Cloudflare Web Analytics beacon (page views on every route,
-including `/models/<slug>` and `/premium/<slug>`) only if `VITE_CF_BEACON_TOKEN`
-is set at build time. Manual one-time setup (requires full Cloudflare dashboard
-access -- the domain-automation API token only has zone/DNS/Pages-read scope,
-not Account Analytics, so this can't be done via API):
+Model page views (`/models/<slug>`) are real HTTP requests whenever someone
+lands cold (e.g. the Instagram bio link) and show up directly in Cloudflare's
+zone-level GraphQL Analytics API (`httpRequestsAdaptiveGroups`, grouped by
+`clientRequestPath` + `date`) -- this only needs Zone > Analytics > Read on the
+existing domain-automation API token, not the separate Account-level Web
+Analytics beacon product or its own manual dashboard setup.
 
-1. Cloudflare dashboard -> Account Home -> Analytics & Logs -> Web Analytics ->
-   Add a site -> `disruptful.com`.
-2. Copy the generated token (from the `data-cf-beacon` snippet Cloudflare shows).
-3. Pages project `disruptful-site` -> Settings -> Environment variables -> add
-   `VITE_CF_BEACON_TOKEN` (Production and Preview) with that token.
-4. Redeploy (push to `main`, or retrigger the latest deployment) -- the beacon
-   activates automatically, no code changes needed.
-
-OnlyFans/MYM click tracking on the premium page has no supported custom-events
-API in Cloudflare Web Analytics (only automatic page views + web vitals are
-public). Instead, each click briefly pushes a synthetic path
-(`/events/premium-click/<onlyfans|mym>/<model-slug>`) via `history.pushState`,
-which the beacon's SPA soft-navigation tracking records as a page view, then
-immediately restores the real URL via `replaceState` (address bar and back
-button unaffected). Once the beacon is enabled per above, those event paths
-show up as page views in the Web Analytics dashboard, filterable by path.
+2026-10-19 (Edgar): OnlyFans/MYM click tracking previously relied on the
+Cloudflare Web Analytics beacon plus a client-side `history.pushState` trick
+to fake a synthetic page view for each click -- that beacon was never actually
+wired up (needs its own manual "Add a site" + `VITE_CF_BEACON_TOKEN` dashboard
+setup, separate from the zone-level analytics above), and the trick itself
+never produced a real HTTP request even when it is. Replaced with same-origin
+redirect links: the OF/MYM buttons on `/premium/<slug>` now link to
+`/go/of/<slug>` / `/go/mym/<slug>` (`functions/go/[platform]/[slug].js`),
+which 302-redirects to the real URL (`functions/_lib/premiumLinks.js`, shared
+with `functions/api/premium-links.js`). Every real click is now a genuine,
+per-path, per-model HTTP request the same zone-level Analytics API above can
+count -- no beacon, no dashboard setup, and the real URL never reaches the
+client at all (stricter than the previous post-age-gate fetch, which did).

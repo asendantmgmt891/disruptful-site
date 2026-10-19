@@ -73,24 +73,12 @@ function initWebAnalytics() {
 }
 initWebAnalytics()
 
-// Cloudflare Web Analytics has no public custom-events API for the standard
-// beacon (only automatic page views + web vitals). To distinguish OnlyFans
-// vs MYM clicks per model, briefly push a synthetic path so the beacon's
-// SPA soft-navigation tracking records it as a page view, then immediately
-// restore the real URL via replaceState so the address bar and back button
-// are unaffected. This never calls preventDefault, so the actual link
-// (opened in a new tab) navigates instantly and is never delayed.
-function trackPremiumClick(platform, model) {
-  try {
-    const modelKey = model.slug.split('/').pop()
-    const eventPath = `/events/premium-click/${platform.toLowerCase()}/${modelKey}`
-    const realPath = window.location.pathname + window.location.search
-    window.history.pushState(null, '', eventPath)
-    window.history.replaceState(null, '', realPath)
-  } catch (err) {
-    // analytics must never block navigation
-  }
-}
+// 2026-10-19 (Edgar): OnlyFans/MYM buttons now link to the same-origin
+// /go/<of|mym>/<slug> redirect (functions/go/[platform]/[slug].js) instead of
+// the real URL plus a client-side-only history.pushState trick -- that trick
+// never produced an actual HTTP request, so it was invisible to Cloudflare's
+// server-side analytics. A same-origin redirect is a real, countable request
+// per click, and never exposes the real destination URL to the client at all.
 
 function App() {
   const [route, setRoute] = useState(pathName())
@@ -358,12 +346,12 @@ function PremiumSitesPage({ model, navigate }) {
   const [links, setLinks] = useState(null)
   const [linksError, setLinksError] = useState(false)
 
+  const slug = model.slug.replace('/models/', '')
+
   const confirmAge = () => {
     setAgeVerified(true)
-    // Real destination URLs are fetched here, not before -- they never
-    // appear in the static page/bundle a crawler fetches without running
-    // this click handler. See the comment on the `models` array above.
-    const slug = model.slug.replace('/models/', '')
+    // Only fetches which buttons to show (booleans) now -- the real URL
+    // never reaches the client at all, see functions/api/premium-links.js.
     fetch(`/api/premium-links?slug=${encodeURIComponent(slug)}`)
       .then((res) => { if (!res.ok) throw new Error('bad response'); return res.json() })
       .then((data) => setLinks(data))
@@ -371,7 +359,10 @@ function PremiumSitesPage({ model, navigate }) {
   }
 
   const availableLinks = links
-    ? [{ label: 'OF', href: links.premium }, { label: 'MYM', href: links.mym }].filter((link) => link.href)
+    ? [
+        { label: 'OF', href: `/go/of/${slug}`, available: links.premium },
+        { label: 'MYM', href: `/go/mym/${slug}`, available: links.mym },
+      ].filter((link) => link.available)
     : []
 
   return (
@@ -386,7 +377,7 @@ function PremiumSitesPage({ model, navigate }) {
           {linksError ? <p>Something went wrong loading these links. Please try again.</p> : !links ? <p>Loading…</p> : <>
             <p>Choose a site to continue.</p>
             <div className="premium-site-options">
-              {availableLinks.map((link) => <a key={link.label} className="button modal-continue" href={link.href} target="_blank" rel="noreferrer" onClick={() => trackPremiumClick(link.label, model)}>{link.label}</a>)}
+              {availableLinks.map((link) => <a key={link.label} className="button modal-continue" href={link.href} target="_blank" rel="noreferrer">{link.label}</a>)}
             </div>
           </>}
         </>}
