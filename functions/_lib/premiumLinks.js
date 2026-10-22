@@ -5,4 +5,5 @@ export const PREMIUM_LINKS = {
   'veyra-stehl': { premium: 'https://onlyfans.com/veyrastehl', mym: 'https://mym.fans/Veyrastehl' },
   'emyra-vesce': { premium: 'https://onlyfans.com/emyravesce', mym: 'https://mym.fans/Emyravesce' },
   'siyenna-luyxe': { premium: 'https://onlyfans.com/siyennaluyxe', mym: 'https://mym.fans/Siyennaluyxe' },
+  'amorelia-solene': { premium: 'https://onlyfans.com/amoreliasolene', mym: 'https://mym.fans/Amoreliasolene' },
 }
