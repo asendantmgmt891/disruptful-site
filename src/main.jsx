@@ -442,12 +442,12 @@ function ApplyPage() {
   }
   return (
     <section className="section-pad apply-page">
-      <div className="section-heading"><p className="eyebrow">Model application</p><h1>Apply to work with Disruptful.</h1><p className="lede">Tell us where you are now and where you want to go. Applicants must be 18+.</p></div>
+      <div className="section-heading"><p className="eyebrow">Model application</p><h1>Apply to work with Disruptful.</h1><p className="lede">Tell us where you are now and where you want to go.</p></div>
       {sent ? <div className="success"><BadgeCheck /><h2>Application received.</h2><p>Thanks for reaching out. The Disruptful team has your application and will review it soon.</p></div> :
       <form className="apply-form" onSubmit={submit}>
         <label className="hidden-field">Website<input name="website" value={form.website} onChange={update} tabIndex="-1" autoComplete="off" /></label>
         <label>Full name or creator name<input name="name" value={form.name} onChange={update} required /></label>
-        <label>Age<input name="age" inputMode="numeric" value={form.age} onChange={update} required placeholder="18+ only" /></label>
+        <label>Age<input name="age" inputMode="numeric" value={form.age} onChange={update} required placeholder="Your age" /></label>
         <label>City / state<input name="cityState" value={form.cityState} onChange={update} required /></label>
         <label>Instagram / TikTok / main social<input name="instagram" value={form.instagram} onChange={update} required /></label>
         <label>Current platforms<textarea name="platforms" value={form.platforms} onChange={update} placeholder="Where are you currently posting or monetizing?" /></label>
