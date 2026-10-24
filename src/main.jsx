@@ -462,7 +462,7 @@ function ApplyPage() {
 }
 
 function Footer({ navigate }) {
-  return <footer className="footer"><div><strong>Disruptful</strong><p>Premium creator growth studio. 18+ applicants only.</p></div><a href="/apply" onClick={navigate('/apply')}>Apply now</a></footer>
+  return <footer className="footer"><div><strong>Disruptful</strong><p>Premium creator growth studio.</p></div><a href="/apply" onClick={navigate('/apply')}>Apply now</a></footer>
 }
 
 createRoot(document.getElementById('root')).render(<App />)
