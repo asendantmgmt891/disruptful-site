@@ -109,11 +109,22 @@ function App() {
     return <HomePage navigate={navigate} />
   }, [route])
 
+  // 2026-10-27 (Edgar): individual model profile/premium pages must not carry
+  // the shared site Header (Studio/Sky/Eddie/Sharon/Models/Apply nav) or
+  // Footer ("Disruptful -- Premium creator growth studio" branding). Even
+  // with the premium link itself hidden from bots, this header/footer alone
+  // still visibly links a model's page to every other model and the studio
+  // brand -- the exact "shared multi-model creator growth studio" signal
+  // Instagram's Links review penalizes (confirmed: this is what got
+  // disruptful.org/models/veyra-stehl flagged). Model pages now render
+  // standalone, same as veyrastehl.net.
+  const standalone = /^\/models\/[^/]+$/.test(route) || /^\/premium\//.test(route)
+
   return (
     <>
-      <Header route={route} navigate={navigate} />
+      {!standalone && <Header route={route} navigate={navigate} />}
       <main>{React.cloneElement(page, { navigate })}</main>
-      <Footer navigate={navigate} />
+      {!standalone && <Footer navigate={navigate} />}
     </>
   )
 }
