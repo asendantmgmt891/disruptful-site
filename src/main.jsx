@@ -352,16 +352,19 @@ function PremiumSitesPage({ model, navigate }) {
     setAgeVerified(true)
     // Only fetches which buttons to show (booleans) now -- the real URL
     // never reaches the client at all, see functions/api/premium-links.js.
+    // 2026-10-27: response also carries a short-lived signed token that must
+    // be passed back to /go/<platform>/<slug> -- see functions/_lib/premiumToken.js.
     fetch(`/api/premium-links?slug=${encodeURIComponent(slug)}`)
       .then((res) => { if (!res.ok) throw new Error('bad response'); return res.json() })
       .then((data) => setLinks(data))
       .catch(() => setLinksError(true))
   }
 
+  const tokenParam = links?.token ? `?t=${encodeURIComponent(links.token)}` : ''
   const availableLinks = links
     ? [
-        { label: 'OF', href: `/go/of/${slug}`, available: links.premium },
-        { label: 'MYM', href: `/go/mym/${slug}`, available: links.mym },
+        { label: 'OF', href: `/go/of/${slug}${tokenParam}`, available: links.premium },
+        { label: 'MYM', href: `/go/mym/${slug}${tokenParam}`, available: links.mym },
       ].filter((link) => link.available)
     : []
 

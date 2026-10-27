@@ -8,7 +8,14 @@
 // client-side-only history trick, as a side effect this is also strictly more
 // private -- the real URL now never reaches the client at all, not even after
 // the age gate.
+//
+// 2026-10-27 (Edgar, bot-mitigation parity with veyrastehl.net): also issues a
+// short-lived signed token the client must pass back to /go/<platform>/<slug>,
+// and requires a same-origin Referer + rejects known-bot UAs before even
+// returning the booleans. Naive automated reviewers that fetch this endpoint
+// directly (no real page load / no real click) get nothing.
 import { PREMIUM_LINKS } from '../_lib/premiumLinks.js'
+import { issuePremiumToken, isKnownBot, sameOriginReferer } from '../_lib/premiumToken.js'
 
 const json = (body, status = 200) =>
   new Response(JSON.stringify(body), {
@@ -17,10 +24,14 @@ const json = (body, status = 200) =>
   })
 
 export async function onRequestGet({ request }) {
+  if (!sameOriginReferer(request) || isKnownBot(request)) {
+    return json({ error: 'Forbidden.' }, 403)
+  }
   const slug = new URL(request.url).searchParams.get('slug') || ''
   const links = PREMIUM_LINKS[slug]
   if (!links) return json({ error: 'Unknown model.' }, 404)
-  return json({ premium: Boolean(links.premium), mym: Boolean(links.mym) })
+  const token = await issuePremiumToken(slug)
+  return json({ premium: Boolean(links.premium), mym: Boolean(links.mym), token })
 }
 
 export async function onRequest() {
