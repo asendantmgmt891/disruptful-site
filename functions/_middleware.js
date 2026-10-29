@@ -15,7 +15,16 @@ const MODEL_DOMAIN_REDIRECTS = {
 // here (no nav, no other-model links, no Disruptful branding) and let
 // static asset requests (images, etc.) fall through to context.next() so
 // they still resolve from this same deployment's /images/models assets.
-const VEYRA_STANDALONE_HOSTS = new Set(["veyrastehl.com", "www.veyrastehl.com"]);
+// 2026-10-29 (Architect): the actual Instagram bio link is veyrastehl.net,
+// not .com -- .net was never added here and was still bound to an orphaned
+// legacy Worker (pre-dating this site) that literally hardcoded the string
+// "OnlyFans" in its page source. Adding it here only takes effect once the
+// Cloudflare custom-domain binding for veyrastehl.net is repointed from
+// that Worker to this Pages project.
+const VEYRA_STANDALONE_HOSTS = new Set([
+  "veyrastehl.com", "www.veyrastehl.com",
+  "veyrastehl.net", "www.veyrastehl.net",
+]);
 
 function veyraStandalonePage() {
   const gallery = [
